@@ -11,11 +11,11 @@ EXECUTIONS_DATA_PRUNE_MAX_COUNT = "10000"
 GENERIC_TIMEZONE = "Europe/Amsterdam"
 N8N_DIAGNOSTICS_ENABLED = "false"
 N8N_HIRING_BANNER_ENABLED = "false"
-N8N_HOST = "flyn8nqwik.fly.dev"
+N8N_HOST = "yoururl.fly.dev"
 N8N_PORT = "8080"
 N8N_PROTOCOL = "https"
 TINI_SUBREAPER = "true"
-WEBHOOK_URL = "https://flyn8nqwik.fly.dev"
+WEBHOOK_URL = "https://yoururl.fly.dev"
 
 [http_service]
 auto_start_machines = true
