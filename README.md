@@ -86,12 +86,129 @@ https://[app-name].fly.dev/
 
 ## Troubleshooting
 
-If you encounter issues:
+### Common Issues and Solutions
 
-1. Check your fly.toml configuration
-2. Verify your environment variables
-3. Ensure your app name and URLs match in all configurations
-4. Check Fly.io's status page for any ongoing issues
+#### 1. Deployment Failures
+- **Issue**: `fly launch` fails
+  ```bash
+  Error: failed to fetch an image or build from source
+  ```
+  **Solution**: 
+  - Verify your internet connection
+  - Check if Fly.io services are up
+  - Run `fly status` to check your authentication
+  - Try `fly auth login` to reauthenticate
+
+#### 2. Configuration Issues
+- **Issue**: Application not starting properly
+  **Solution**:
+  1. Check your `fly.toml` configuration:
+     ```bash
+     fly status
+     fly logs
+     ```
+  2. Verify these essential configurations:
+     ```toml
+     app = "your-unique-app-name"
+     primary_region = "ams"  # or your chosen region
+     
+     [env]
+     N8N_HOST = "https://your-app-name.fly.dev"
+     WEBHOOK_URL = "https://your-app-name.fly.dev"
+     ```
+
+#### 3. Connection Issues
+- **Issue**: Cannot access the n8n interface
+  **Solutions**:
+  1. Verify DNS propagation:
+     ```bash
+     fly status
+     ```
+  2. Check if the application is running:
+     ```bash
+     fly apps list
+     fly status
+     ```
+  3. Inspect logs for errors:
+     ```bash
+     fly logs
+     ```
+
+#### 4. Resource Issues
+- **Issue**: Application crashes or performs poorly
+  **Solutions**:
+  1. Check resource usage:
+     ```bash
+     fly status
+     ```
+  2. Adjust resources in `fly.toml`:
+     ```toml
+     [services]
+       [[services.concurrency]]
+         type = "connections"
+         hard_limit = 25
+         soft_limit = 20
+     
+     [[vm]]
+       cpu_kind = "shared"
+       cpus = 1
+       memory_mb = 1024
+     ```
+
+#### 5. Auto-stop Issues
+- **Issue**: Application stops unexpectedly
+  **Note**: This is expected behavior as mentioned in deployment notes
+  **Solutions**:
+  1. Check auto-stop settings:
+     ```bash
+     fly status
+     ```
+  2. Modify auto-stop behavior in `fly.toml`:
+     ```toml
+     [services]
+       auto_stop_machines = true
+       auto_start_machines = true
+       min_machines_running = 0
+     ```
+
+#### 6. Database Connection Issues
+- **Issue**: Cannot connect to database
+  **Solutions**:
+  1. Verify database settings:
+     ```bash
+     fly redis list  # for Redis
+     fly postgres list  # for PostgreSQL
+     ```
+  2. Check connection strings in environment variables
+  3. Ensure database service is running:
+     ```bash
+     fly status
+     ```
+
+### Debug Commands Reference
+
+Useful commands for troubleshooting:
+```bash
+fly logs  # View application logs
+fly status  # Check application status
+fly secrets list  # View configured secrets
+fly regions list  # View available regions
+fly scale show  # Check current resource allocation
+```
+
+### Getting Help
+
+If you're still experiencing issues:
+
+1. Visit [Fly.io Status Page](https://status.fly.io/)
+2. Check [n8n Community Forums](https://community.n8n.io/)
+3. Review [Fly.io Documentation](https://fly.io/docs/)
+4. Join [n8n Discord](https://discord.gg/n8n)
+5. Open an issue in this repository with:
+   - Detailed error description
+   - Relevant logs
+   - Steps to reproduce
+   - Your `fly.toml` configuration (with sensitive data removed)
 
 ## Support
 
