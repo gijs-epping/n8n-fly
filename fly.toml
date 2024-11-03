@@ -1,0 +1,40 @@
+app = "flyn8nqwik"
+primary_region = "ams"
+
+[build]
+image = "n8nio/n8n"
+
+[env]
+EXECUTIONS_DATA_MAX_AGE = "168"
+EXECUTIONS_DATA_PRUNE = "true"
+EXECUTIONS_DATA_PRUNE_MAX_COUNT = "10000"
+GENERIC_TIMEZONE = "Europe/Amsterdam"
+N8N_DIAGNOSTICS_ENABLED = "false"
+N8N_HIRING_BANNER_ENABLED = "false"
+N8N_HOST = "flyn8nqwik.fly.dev"
+N8N_PORT = "8080"
+N8N_PROTOCOL = "https"
+TINI_SUBREAPER = "true"
+WEBHOOK_URL = "https://flyn8nqwik.fly.dev"
+
+[http_service]
+auto_start_machines = true
+auto_stop_machines = true
+force_https = true
+internal_port = 8_080
+min_machines_running = 1
+processes = [ "app" ]
+
+[http_service.concurrency]
+hard_limit = 100
+soft_limit = 50
+type = "connections"
+
+[[mounts]]
+destination = "/home/node/.n8n"
+source = "n8n_vol"
+
+[[vm]]
+cpu_kind = "shared"
+cpus = 1
+memory = "1gb"
