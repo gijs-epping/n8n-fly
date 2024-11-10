@@ -1,4 +1,4 @@
-app = "yourappname"
+app = "n8n-oneway-bike"
 primary_region = "ams"
 
 [build]
