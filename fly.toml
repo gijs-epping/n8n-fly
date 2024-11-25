@@ -1,13 +1,16 @@
-# fly.toml app configuration file generated for n8n-oneway-bike on 2024-11-15T16:53:42+01:00
+# fly.toml app configuration file generated for onewayservice on 2024-11-21T07:08:58+01:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'flyn8nqwik'
+app = 'onewayservice'
 primary_region = 'ams'
 
 [build]
-  image = 'n8nio/n8n'
+  dockerfile = "Dockerfile"
+  [build.args]
+    NODE_VERSION = "20"
+    N8N_VERSION = "1.68.0"
 
 [env]
   EXECUTIONS_DATA_MAX_AGE = '168'
@@ -18,19 +21,24 @@ primary_region = 'ams'
   N8N_DIAGNOSTICS_ENABLED = 'false'
   N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS = 'true'
   N8N_HIRING_BANNER_ENABLED = 'false'
-  N8N_HOST = 'flyn8nqwik.fly.dev'
+  N8N_HOST = '0.0.0.0'
   N8N_PORT = '8080'
   N8N_PROTOCOL = 'https'
   NODE_FUNCTION_ALLOW_EXTERNAL = 'true'
   TINI_SUBREAPER = 'true'
-  WEBHOOK_URL = 'https://flyn8nqwik.fly.dev'
+  WEBHOOK_URL = 'https://onewayservice.fly.dev/n8n'
+  N8N_PATH = '/n8n'
+  N8N_WEBHOOK_TUNNEL_URL = 'https://onewayservice.fly.dev/n8n'
+  N8N_ENDPOINT_REST = '/n8n'
+  N8N_ENDPOINT_WEBHOOK = '/n8n/webhook'
+  N8N_ENDPOINT_WEBHOOK_TEST = '/n8n/webhook-test'
 
 [[mounts]]
   source = 'n8n_vol'
   destination = '/home/node/.n8n'
 
 [http_service]
-  internal_port = 8080
+  internal_port = 8081
   force_https = true
   auto_stop_machines = 'stop'
   auto_start_machines = true
@@ -51,6 +59,6 @@ primary_region = 'ams'
   local_path = 'build.sh'
 
 [[vm]]
-  memory = '1gb'
+  memory = '2gb'
   cpu_kind = 'shared'
   cpus = 1
