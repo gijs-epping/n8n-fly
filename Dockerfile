@@ -28,14 +28,14 @@ COPY n8n-nodes-n8nergonode-0.1.0.tgz /home/node/
 RUN \ 
 	mkdir /home/database && \
 	apk add sqlite && \
-	sqlite3 /home/database/onewaybike.db 'CREATE TABLE IF NOT EXISTS bikes (id INTEGER PRIMARY KEY, name TEXT);'
+	sqlite3 /home/database/qwikwinsservice.db 'CREATE TABLE IF NOT EXISTS customers (id INTEGER PRIMARY KEY, name TEXT);'
 	
 RUN \ 
 	corepack prepare pnpm@latest --activate && \
 	pnpm install --prefix '/home/node/.n8n/customnodes' '/home/node/n8n-nodes-n8nergonode-0.1.0.tgz'
 
 # Setup the Task Runner Launcher
-
+RUN npm install jsonwebtoken
 ENV N8N_RUNNERS_MODE=internal_launcher \
     N8N_RUNNERS_LAUNCHER_PATH=/usr/local/bin/task-runner-launcher
 COPY n8n-task-runners.json /etc/n8n-task-runners.json

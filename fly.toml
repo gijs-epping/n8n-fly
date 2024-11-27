@@ -1,18 +1,22 @@
-# fly.toml configuration for n8n deployment
-app = 'onewayservice'
+# fly.toml app configuration file generated for qwikwinsservice on 2024-11-25T21:23:10+01:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'qwikwinsservice'
 primary_region = 'ams'
 
 [build]
-  dockerfile = "Dockerfile"
+  dockerfile = 'Dockerfile'
 
 [env]
-  N8N_HOST = 'onewayservice.fly.dev'
-  N8N_PROTOCOL = 'https'
-  N8N_PORT = '5678'
-  N8N_LISTEN_ADDRESS = '0.0.0.0'
-  NODE_ENV = 'production'
-  WEBHOOK_URL = 'https://onewayservice.fly.dev'
   GENERIC_TIMEZONE = 'Europe/Amsterdam'
+  N8N_HOST = 'qwikwinsservice.fly.dev'
+  N8N_LISTEN_ADDRESS = '0.0.0.0'
+  N8N_PORT = '5678'
+  N8N_PROTOCOL = 'https'
+  NODE_ENV = 'production'
+  WEBHOOK_URL = 'https://qwikwinsservice.fly.dev'
 
 [[mounts]]
   source = 'n8n_vol'
@@ -21,17 +25,17 @@ primary_region = 'ams'
 [http_service]
   internal_port = 5678
   force_https = true
-  auto_stop_machines = true
+  auto_stop_machines = 'stop'
   auto_start_machines = true
   min_machines_running = 1
 
   [[http_service.checks]]
-    interval = "30s"
-    timeout = "5s"
-    grace_period = "30s"
-    method = "GET"
-    path = "/healthz"
-    protocol = "http"
+    interval = '30s'
+    timeout = '5s'
+    grace_period = '30s'
+    method = 'GET'
+    path = '/healthz'
+    protocol = 'http'
 
 [[vm]]
   memory = '1gb'
