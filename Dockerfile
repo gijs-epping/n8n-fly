@@ -1,10 +1,3 @@
-# Build React frontend
-FROM node:18 AS frontend-builder
-WORKDIR /app
-COPY frontend/ ./
-RUN npm install
-RUN npm run build
-
 # Final image
 FROM n8nio/n8n:1.68.0
 
