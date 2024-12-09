@@ -1,3 +1,8 @@
+
+
+# Python
+pip install -r requirements.txt
+
 # n8n on Fly.io
 
 This repository provides instructions and configuration for hosting n8n on Fly.io. n8n is a workflow automation tool that allows you to connect various services and automate tasks.

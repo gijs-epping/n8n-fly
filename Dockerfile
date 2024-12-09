@@ -1,4 +1,4 @@
-FROM n8nio/n8n:1.68.0
+FROM n8nio/n8n:1.70.3
 
 USER root
 
@@ -15,21 +15,26 @@ ENV N8N_BINARY_DATA_STORAGE_PATH=/home/node/.n8n/binairydata
 ENV DB_SQLITE_VACUUM_ON_STARTUP=true
 
 RUN \
-	mkdir -p /home/node/.n8n/customnodes && \
-	chown node:node .n8n/customnodes && \ 
-	mkdir -p /home/node/.n8n/binairydata && \
-	chown node:node .n8n/binairydata
+	mkdir /home/node/.n8n/customnodes && \
+	chown node:node .n8n/customnodes && \
+	mkdir /home/node/.n8n/binairydata && \
+	chown node:node .n8n/binairydata && \
+	mkdir /home/node/.n8n/python && \
+	chown node:node .n8n/python && \
+	mkdir /home/node/.n8n/database && \
+	chown node:node .n8n/database
 
 COPY n8n-nodes-n8nergonode-0.1.0.tgz /home/node/
-
-
+COPY src/* /home/node/.n8n/python
 
 
 RUN \ 
-	mkdir /home/database && \
 	apk add sqlite && \
-	sqlite3 /home/database/qwikwinsservice.db 'CREATE TABLE IF NOT EXISTS customers (id INTEGER PRIMARY KEY, name TEXT);'
+	sqlite3 /home/node/.n8n/database/onewaybike.db 'CREATE TABLE IF NOT EXISTS customers (id INTEGER PRIMARY KEY, name TEXT);' 
 	
+RUN chown node:node /home/node/.n8n/database
+RUN chown node:node /home/node/.n8n/database/onewaybike.db
+RUN chmod 0666 /home/node/.n8n/database/onewaybike.db
 RUN \ 
 	corepack prepare pnpm@latest --activate && \
 	pnpm install --prefix '/home/node/.n8n/customnodes' '/home/node/n8n-nodes-n8nergonode-0.1.0.tgz'

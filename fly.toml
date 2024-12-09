@@ -3,7 +3,7 @@
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'qwikwinsservice'
+app = 'onewayservice'
 primary_region = 'ams'
 
 [build]
@@ -11,12 +11,12 @@ primary_region = 'ams'
 
 [env]
   GENERIC_TIMEZONE = 'Europe/Amsterdam'
-  N8N_HOST = 'qwikwinsservice.fly.dev'
+  N8N_HOST = 'onewayservice.fly.dev'
   N8N_LISTEN_ADDRESS = '0.0.0.0'
   N8N_PORT = '5678'
   N8N_PROTOCOL = 'https'
   NODE_ENV = 'production'
-  WEBHOOK_URL = 'https://qwikwinsservice.fly.dev'
+  WEBHOOK_URL = 'https://onewayservice.fly.dev'
 
 [[mounts]]
   source = 'n8n_vol'
