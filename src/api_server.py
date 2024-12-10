@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException
+from flask import Flask
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from typing import List, Dict
@@ -6,6 +7,10 @@ import uvicorn
 import re
 import os
 import sqlite3
+
+
+
+
 
 from src.api_functions import (
     handle_get_recent_orders,
@@ -15,7 +20,8 @@ from src.api_functions import (
     handle_get_delivery_time_product
 )
 
-app = FastAPI()
+
+app = Flask(__name__)
 
 class FunctionRequest(BaseModel):
     function: str
@@ -71,7 +77,7 @@ async def root():
     return JSONResponse(
         content={
             "status": "success",
-            "message": "API server is running"
+            "message": "Python API server is running"
         }
     )
 
@@ -124,6 +130,10 @@ async def execute_function(request: FunctionRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-if __name__ == "__main__":
-    port = int(os.getenv("PORT", "8000"))
-    uvicorn.run("src.api_server:app", host="0.0.0.0", port=port, reload=False)
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
+
+
+
+
+

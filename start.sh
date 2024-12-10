@@ -1,26 +1,8 @@
 #!/bin/sh
-set -e
 
-# Ensure nginx directories exist and have correct permissions
-mkdir -p /tmp/client_temp /tmp/proxy_temp /tmp/fastcgi_temp /tmp/uwsgi_temp /tmp/scgi_temp
-chown -R nginx:nginx /tmp/*
-chmod -R 755 /tmp
+# Activate Python virtual environment and start the API in the background
+. /home/node/.n8n/python/venv/bin/activate && \
+python3 -m uvicorn src.api_server:app --host 0.0.0.0 --port 8000 &
 
-# Ensure frontend files have correct permissions
-chown -R nginx:nginx /usr/share/nginx/frontend
-chmod -R 755 /usr/share/nginx/frontend
-
-# Ensure n8n directories have correct permissions
-chown -R node:node /home/node/.n8n
-chmod -R 755 /home/node/.n8n
-chown -R node:node /root/.n8n
-chmod -R 755 /root/.n8n
-
-# Start nginx with daemon off
-/usr/sbin/nginx -g 'daemon off;' &
-
-# Wait a moment for nginx to start
-sleep 2
-
-# Start n8n as node user with the full path
-su-exec node /usr/local/bin/n8n start
+# Start n8n in the foreground
+n8n start
