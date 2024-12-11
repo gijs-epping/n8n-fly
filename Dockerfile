@@ -1,5 +1,6 @@
 FROM n8nio/n8n:1.70.3
 
+
 USER root
 
 ARG TARGETPLATFORM
@@ -22,7 +23,7 @@ RUN apk add --update python3 py3-pip python3-dev
 RUN \
     mkdir -p /home/node/.n8n/customnodes && \
     mkdir -p /home/node/.n8n/binairydata && \
-    mkdir -p /home/node/.n8n/python && \
+    mkdir -p /home/node/python && \
     mkdir -p /home/node/.n8n/database && \
     chown -R node:node /home/node/.n8n && \
     chmod -R 755 /home/node/.n8n
@@ -40,16 +41,34 @@ RUN chmod 0666 /home/node/.n8n/database/onewaybike.db
 
 
 # Create and activate virtual environment
-RUN python3 -m venv /home/node/.n8n/python/venv
-ENV PATH="/home/node/.n8n/python/venv/bin:$PATH"
+RUN python3 -m venv /home/node/python/venv
+ENV PATH="/home/node/python/venv/bin:$PATH"
 
 # Copy Python files and requirements
-COPY ./src /home/node/.n8n/python/
-COPY requirements.txt /home/node/.n8n/python/
+COPY python/ /home/node/python/
+COPY requirements.txt /home/node/python/
+
+# Set proper permissions after copying
+RUN chown -R node:node /home/node/python && \
+    chmod -R 755 /home/node/python
 
 # Install Python dependencies in virtual environment
-RUN . /home/node/.n8n/python/venv/bin/activate && \
-    pip3 install --no-cache-dir -r /home/node/.n8n/python/requirements.txt
+RUN . /home/node/python/venv/bin/activate && \
+    pip3 install --no-cache-dir -r /home/node/python/requirements.txt
+
+RUN apk add --no-cache \
+    python3 \
+    py3-pip \
+    python3-dev \
+    py3-requests  # Add this line for the requests package
+
+# Activate virtual environment and install packages
+RUN . /home/node/python/venv/bin/activate && \
+    pip install --no-cache-dir \
+    fastapi \
+    uvicorn \
+    requests
+
 
 # Copy and install n8n custom node
 COPY n8n-nodes-n8nergonode-0.1.0.tgz /home/node/
@@ -65,8 +84,7 @@ RUN npm install jsonwebtoken
 ENV N8N_RUNNERS_MODE=internal_launcher \
     N8N_RUNNERS_LAUNCHER_PATH=/usr/local/bin/task-runner-launcher
 COPY n8n-task-runners.json /etc/n8n-task-runners.json
+COPY plasmic.md /home/node/python/
 
 # Expose both n8n and Python API ports
 EXPOSE 5678 8000
-
-USER root
